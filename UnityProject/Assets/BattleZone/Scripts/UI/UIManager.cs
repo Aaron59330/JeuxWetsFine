@@ -99,7 +99,17 @@ namespace BattleZone
             canvas = cg.AddComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 10;
             var sc = cg.AddComponent<CanvasScaler>(); sc.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; sc.referenceResolution = new Vector2(1920, 1080); sc.matchWidthOrHeight = 1f;
             cg.AddComponent<GraphicRaycaster>();
-            if (EventSystem.current == null) new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            if (EventSystem.current == null)
+            {
+                var es = new GameObject("EventSystem", typeof(EventSystem));
+#if ENABLE_INPUT_SYSTEM
+                // Nouveau système d'entrée (par défaut dans Unity 6)
+                var mod = es.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+                mod.AssignDefaultActions();
+#else
+                es.AddComponent<StandaloneInputModule>();
+#endif
+            }
 
             BuildHud(); BuildMain(); BuildModes(); BuildLoadout(); BuildSettings(); BuildHelp(); BuildPause(); BuildEnd();
         }
