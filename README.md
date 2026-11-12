@@ -31,3 +31,6 @@ puis ouvre http://localhost:8000
 | Échap | Pause |
 
 Menus : Jouer, Équipement (choix des armes), Options (sensibilité, FOV, volume, bots, difficulté), Aide, Pause, écran de fin.
+
+## Version Unity
+Une version Unity (C#) est dans `UnityProject/` — voir `UnityProject/README.md` pour l'installation pas à pas.
