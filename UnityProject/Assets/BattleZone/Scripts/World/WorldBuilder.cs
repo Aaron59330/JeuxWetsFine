@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BattleZone
 {
-    public class Poi { public Vector2 pos; public float h; public float R = 40f; }
+    [System.Serializable] public class Poi { public Vector2 pos; public float h; public float R = 40f; }
 
     /// <summary>
     /// Construit toute l'île par code : terrain (collines, falaises, plages, lagon), eau, ciel,
@@ -202,8 +202,6 @@ namespace BattleZone
             var concrete = U.Lit(new Color(.7f, .72f, .75f));
             var wood = U.Lit(new Color(.5f, .36f, .22f));
             var crateM = U.Lit(new Color(.65f, .45f, .22f));
-            const float T = .4f;
-
             foreach (var p in pois)
             {
                 float by = p.h; int count = 3 + rng.Next(3), made = 0, tries = 0;

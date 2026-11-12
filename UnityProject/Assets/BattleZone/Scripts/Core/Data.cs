@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace BattleZone
 {
+    [System.Serializable]
     public class WeaponDef
     {
         public string id, name;

@@ -9,14 +9,14 @@ namespace BattleZone
     {
         public static readonly List<BotAI> All = new List<BotAI>();
         public Health health;
-        public WeaponDef wd;
+        [System.NonSerialized] public WeaponDef wd;
         public float lastShot = 99f;
         public bool HasTarget { get { return target != null; } }
 
         CharacterController cc; WorldBuilder world;
         Health target; Transform legL, legR;
         float thinkT, react, fireCd, pause = 1f, goalT, stuckT, walk, vy, yaw;
-        int burst, strafe = 1; Vector3 goal, lastPos, vel; float idleDeadT;
+        float strafeSeed = Random.value * 100f; int burst, strafe = 1; Vector3 goal, lastPos, vel; float idleDeadT;
 
         struct Diff { public float acc, dmg, react, spd; }
         static readonly Diff[] D = {
@@ -86,7 +86,7 @@ namespace BattleZone
                 yaw = Mathf.LerpAngle(yaw, Mathf.Atan2(fwd.x, fwd.z) * Mathf.Rad2Deg, 1f - Mathf.Exp(-9f * dt));
                 float ideal; if (!Ideal.TryGetValue(wd.id, out ideal)) ideal = 25f;
                 if (dist > ideal + 8f) want += fwd; else if (dist < ideal - 8f) want -= fwd;
-                strafe = Mathf.Sin(Time.time * .7f + GetInstanceID()) > 0 ? 1 : -1;
+                strafe = Mathf.Sin(Time.time * .7f + strafeSeed) > 0 ? 1 : -1;
                 want += new Vector3(fwd.z, 0, -fwd.x) * strafe * .8f; spd *= .85f;
                 react -= dt;
                 if (react <= 0 && fireCd <= 0)

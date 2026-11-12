@@ -19,7 +19,7 @@ namespace BattleZone
         Text tAlive, tKills, tZone, tAmmo, tRes, tWeapon, tPrompt, tBanner, tHp, tSh, tSlot0, tSlot1, mainStats, endTitle, endSub, arrow;
         RectTransform hpFill, shFill, killfeed, endStats, zoneRing, nextRing, mapRoot;
         Image vignette, hitV, hitH, dmgDir, slot0Bg, slot1Bg; RectTransform dmgDirRoot, hitRoot;
-        GameObject scopeGo; Texture2D mapTex;
+        GameObject scopeGo;
         float bannerT, vignT, hitT, dirT; bool hitKill;
         GameMode hudMode;
         Text lblSens, lblFov, lblVol, lblBots, btnDiffTxt, btnInvTxt;
@@ -243,7 +243,7 @@ namespace BattleZone
             mapRoot = NewRT("Map", h); Place(mapRoot, new Vector2(1, 1), new Vector2(1, 1), new Vector2(-20, -20), new Vector2(230, 230));
             var mbg = mapRoot.gameObject.AddComponent<Image>(); mbg.color = new Color(0, 0, 0, .6f); mapRoot.gameObject.AddComponent<RectMask2D>();
             var mimg = NewRT("Tex", mapRoot); Place(mimg, new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, new Vector2(230, 230)); mimg.gameObject.AddComponent<RawImage>().raycastTarget = false;
-            mapTex = null; mimg.name = "MapTex";
+            mimg.name = "MapTex";
             var ringTex = U.CircleTex(256, true);
             zoneRing = NewRT("Zone", mapRoot); var zr = zoneRing.gameObject.AddComponent<RawImage>(); zr.texture = ringTex; zr.color = new Color(.65f, .3f, 1f, 1f); zr.raycastTarget = false;
             nextRing = NewRT("Next", mapRoot); var nr = nextRing.gameObject.AddComponent<RawImage>(); nr.texture = ringTex; nr.color = Color.white; nr.raycastTarget = false;

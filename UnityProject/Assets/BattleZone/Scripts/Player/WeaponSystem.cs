@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace BattleZone
 {
-    public class WeaponSlot { public WeaponDef def; public int ammo, reserve; }
+    [System.Serializable] public class WeaponSlot { public WeaponDef def; public int ammo, reserve; }
 
     /// <summary>Tir hitscan, recul, visée (ADS), rechargement, changement d'arme, ramassage.</summary>
     public class WeaponSystem : MonoBehaviour
     {
-        public WeaponSlot[] slots = new WeaponSlot[2];
+        [System.NonSerialized] public WeaponSlot[] slots = new WeaponSlot[2];
         public int cur;
         public float ads, reloadT;
         public bool FireHeldWithAmmo { get { return Input.GetMouseButton(0) && slots[cur].ammo > 0; } }
