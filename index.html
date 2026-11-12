@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BATTLE ZONE</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- ===== HUD ===== -->
+<div id="hud" class="hidden">
+  <div id="crosshair"><i></i><i></i><i></i><i></i></div>
+  <div id="hitmarker"></div>
+  <div id="scope" class="hidden"></div>
+  <div id="dmgvignette"></div>
+  <div id="dmgdir"><div></div></div>
+  <div id="topinfo">
+    <div class="pill">👥 <b id="h-alive">0</b></div>
+    <div class="pill">💀 <b id="h-kills">0</b></div>
+    <div class="pill" id="h-zonebox">🌀 <b id="h-zone">--</b></div>
+  </div>
+  <canvas id="minimap" width="170" height="170"></canvas>
+  <div id="killfeed"></div>
+  <div id="banner"></div>
+  <div id="prompt"></div>
+  <div id="bottom">
+    <div id="bars">
+      <div class="bar shield"><div id="b-shield"></div><span id="t-shield">0</span></div>
+      <div class="bar health"><div id="b-health"></div><span id="t-health">100</span></div>
+    </div>
+    <div id="weapons">
+      <div class="wslot" id="ws0"></div>
+      <div class="wslot" id="ws1"></div>
+    </div>
+    <div id="ammo"><b id="a-mag">30</b><span> / <i id="a-res">120</i></span><div id="a-name">—</div></div>
+  </div>
+</div>
+
+<!-- ===== MENU PRINCIPAL ===== -->
+<div id="menu-main" class="screen">
+  <div class="bg-anim"></div>
+  <div class="panel center">
+    <h1 class="logo">BATTLE<span>ZONE</span></h1>
+    <p class="tag">Saison 1 · Bataille totale</p>
+    <button class="btn big" data-go="play">Jouer</button>
+    <button class="btn" data-go="loadout">Équipement</button>
+    <button class="btn" data-go="settings">Options</button>
+    <button class="btn" data-go="help">Comment jouer</button>
+    <div class="stats" id="main-stats"></div>
+  </div>
+</div>
+
+<!-- ===== CHOIX DU MODE ===== -->
+<div id="menu-play" class="screen hidden">
+  <div class="bg-anim"></div>
+  <div class="panel">
+    <h2>CHOISIS TON MODE</h2>
+    <div class="cards">
+      <div class="card" data-mode="br">
+        <div class="ico">🪂</div><h3>Battle Royale</h3>
+        <p>Largue-toi sur l'île, ramasse du loot, survis à la tempête et élimine tout le monde. Une seule vie.</p>
+        <button class="btn">LANCER</button>
+      </div>
+      <div class="card" data-mode="ffa">
+        <div class="ico">⚔️</div><h3>Mêlée générale</h3>
+        <p>Combat sans pause avec réapparition. Premier à 20 éliminations ou meilleur score au bout de 5 min.</p>
+        <button class="btn">LANCER</button>
+      </div>
+    </div>
+    <button class="btn back" data-go="main">← RETOUR</button>
+  </div>
+</div>
+
+<!-- ===== ÉQUIPEMENT ===== -->
+<div id="menu-loadout" class="screen hidden">
+  <div class="bg-anim"></div>
+  <div class="panel wide">
+    <h2>ÉQUIPEMENT</h2>
+    <div class="loadcols">
+      <div><h3>Arme principale</h3><div id="lo-primary" class="wgrid"></div></div>
+      <div><h3>Arme secondaire</h3><div id="lo-secondary" class="wgrid"></div></div>
+    </div>
+    <div id="lo-detail" class="detail"></div>
+    <button class="btn back" data-go="main">← RETOUR</button>
+  </div>
+</div>
+
+<!-- ===== OPTIONS ===== -->
+<div id="menu-settings" class="screen hidden">
+  <div class="bg-anim"></div>
+  <div class="panel">
+    <h2>OPTIONS</h2>
+    <label>Sensibilité souris <b id="v-sens"></b><input type="range" id="s-sens" min="1" max="15" step="0.5"></label>
+    <label>Champ de vision <b id="v-fov"></b><input type="range" id="s-fov" min="60" max="110" step="1"></label>
+    <label>Volume <b id="v-vol"></b><input type="range" id="s-vol" min="0" max="100" step="1"></label>
+    <label>Nombre de bots <b id="v-bots"></b><input type="range" id="s-bots" min="5" max="40" step="1"></label>
+    <label>Difficulté des bots
+      <select id="s-diff"><option value="0">Facile</option><option value="1">Normal</option><option value="2">Difficile</option><option value="3">Cauchemar</option></select>
+    </label>
+    <label class="chk"><input type="checkbox" id="s-invy"> Inverser l'axe Y</label>
+    <label class="chk"><input type="checkbox" id="s-fps"> Afficher les FPS</label>
+    <button class="btn back" data-go="back">← RETOUR</button>
+  </div>
+</div>
+
+<!-- ===== AIDE ===== -->
+<div id="menu-help" class="screen hidden">
+  <div class="bg-anim"></div>
+  <div class="panel wide">
+    <h2>COMMENT JOUER</h2>
+    <div class="keys">
+      <div><kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> ou <kbd>W</kbd><kbd>A</kbd> Se déplacer</div>
+      <div><kbd>Maj</kbd> Sprint</div>
+      <div><kbd>Espace</kbd> Sauter / ouvrir le parachute</div>
+      <div><kbd>C</kbd> / <kbd>Ctrl</kbd> S'accroupir — en sprint : <b>glissade</b></div>
+      <div><kbd>Clic G</kbd> Tirer</div>
+      <div><kbd>Clic D</kbd> Viser</div>
+      <div><kbd>R</kbd> Recharger</div>
+      <div><kbd>1</kbd> <kbd>2</kbd> / molette Changer d'arme</div>
+      <div><kbd>E</kbd> Ramasser une arme</div>
+      <div><kbd>Tab</kbd> Agrandir la carte</div>
+      <div><kbd>Échap</kbd> Pause</div>
+    </div>
+    <p class="note">🪂 En Battle Royale tu tombes du ciel : ouvre ton parachute avec <kbd>Espace</kbd> (il s'ouvre seul près du sol).<br>
+    🌀 La tempête violette se resserre : reste dans le cercle ! Ramasse les kits de soin 🟥, boucliers 🟦 et munitions 🟨.<br>
+    🎯 Les tirs à la tête font plus de dégâts. Les bots se battent aussi entre eux.</p>
+    <button class="btn back" data-go="back">← RETOUR</button>
+  </div>
+</div>
+
+<!-- ===== PAUSE ===== -->
+<div id="menu-pause" class="screen hidden">
+  <div class="panel center">
+    <h2>PAUSE</h2>
+    <button class="btn big" id="b-resume">Reprendre</button>
+    <button class="btn" id="b-pset">Options</button>
+    <button class="btn" id="b-quit">Quitter la partie</button>
+  </div>
+</div>
+
+<!-- ===== FIN DE PARTIE ===== -->
+<div id="menu-end" class="screen hidden">
+  <div class="panel center">
+    <h1 id="end-title">VICTOIRE !</h1>
+    <p id="end-sub" class="tag"></p>
+    <div class="endstats" id="end-stats"></div>
+    <button class="btn big" id="b-again">Rejouer</button>
+    <button class="btn" id="b-menu">Menu principal</button>
+  </div>
+</div>
+
+<!-- ===== CLIC POUR JOUER ===== -->
+<div id="clickhint" class="hidden">Clique pour reprendre le contrôle</div>
+<div id="fps" class="hidden"></div>
+<div id="loading" class="screen"><div class="panel center"><h2>Chargement…</h2></div></div>
+
+<script src="lib/three.min.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
